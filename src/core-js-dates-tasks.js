@@ -225,7 +225,7 @@ function getWeekNumberByDate(date) {
  */
 function getNextFridayThe13th(date) {
   const curDate = new Date(date);
-  while (true) {
+  while (curDate.getTime()) {
     if (curDate.getDate() <= 13) {
       curDate.setDate(13);
     } else {
@@ -237,6 +237,7 @@ function getNextFridayThe13th(date) {
     }
     curDate.setMonth(curDate.getMonth() + 1);
   }
+  return curDate;
 }
 // onsole.log(getNextFridayThe13th(new Date(2024, 0, 13)))
 
@@ -257,7 +258,7 @@ function getQuarter(date) {
   const julFirst = new Date(curDate.getFullYear(), 6, 1);
   const octFirst = new Date(curDate.getFullYear(), 9, 1);
 
-  switch (true) {
+  switch (curDate.getTime()) {
     case curDate.valueOf() < aprFirst.valueOf():
       return 1;
     case curDate.valueOf() < julFirst.valueOf():
@@ -293,7 +294,7 @@ function getWorkSchedule(period, countWorkDays, countOffDays) {
   const start = new Date(`${startArr[2]}-${startArr[1]}-${startArr[0]}`);
   const endArr = period.end.split('-');
   const end = new Date(`${endArr[2]}-${endArr[1]}-${endArr[0]}`);
-  while (true) {
+  while (start.getFullYear()) {
     const formattedDate = `${String(start.getDate()).padStart(2, '0')}-${String(start.getMonth() + 1).padStart(2, '0')}-${start.getFullYear()}`;
     workArr.push(formattedDate);
     start.setDate(start.getDate() + countWorkDays + countOffDays);
