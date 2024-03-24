@@ -248,23 +248,22 @@ function getNextFridayThe13th(date) {
  * Date(2024, 10, 10) => 4
  */
 function getQuarter(date) {
-  const curDate = new Date(date);
+  const curDate = date;
   const aprFirst = new Date(curDate.getFullYear(), 3, 1);
   const julFirst = new Date(curDate.getFullYear(), 6, 1);
   const octFirst = new Date(curDate.getFullYear(), 9, 1);
-
-  switch (curDate.getTime()) {
-    case curDate.valueOf() < aprFirst.valueOf():
-      return 1;
-    case curDate.valueOf() < julFirst.valueOf():
-      return 2;
-    case curDate.valueOf() < octFirst.valueOf():
-      return 3;
-    default:
-      return 4;
+  if (curDate < aprFirst) {
+    return 1;
   }
+  if (curDate < julFirst) {
+    return 2;
+  }
+  if (curDate < octFirst) {
+    return 3;
+  }
+  return 4;
 }
-
+// onsole.log(getQuarter(new Date(2024, 1, 13)))
 /**
  * Generates an employee's work schedule within a specified date range, based on a pattern of working and off days.
  * The start and end dates of the period are inclusive.
@@ -289,17 +288,19 @@ function getWorkSchedule(period, countWorkDays, countOffDays) {
   const start = new Date(`${startArr[2]}-${startArr[1]}-${startArr[0]}`);
   const endArr = period.end.split('-');
   const end = new Date(`${endArr[2]}-${endArr[1]}-${endArr[0]}`);
-  while (start.getFullYear()) {
-    const formattedDate = `${String(start.getDate()).padStart(2, '0')}-${String(start.getMonth() + 1).padStart(2, '0')}-${start.getFullYear()}`;
-    workArr.push(formattedDate);
-    start.setDate(start.getDate() + countWorkDays + countOffDays);
-    if (start.getTime() > end.getTime()) {
-      break;
+  while (start <= end) {
+    for (let i = 1; i <= countWorkDays; i += 1) {
+      if (start <= end) {
+        const formattedDate = `${String(start.getDate()).padStart(2, '0')}-${String(start.getMonth() + 1).padStart(2, '0')}-${start.getFullYear()}`;
+        workArr.push(formattedDate);
+        start.setDate(start.getDate() + 1);
+      }
     }
+    start.setDate(start.getDate() + countOffDays);
   }
   return workArr;
 }
-// onsole.log(getWorkSchedule({ start: '01-01-2024', end: '15-01-2024' }, 1, 3));
+// onsole.log(getWorkSchedule({ start: '01-01-2024', end: '31-03-2024' }, 3, 2));
 
 /**
  * Determines whether the year in the provided date is a leap year.
